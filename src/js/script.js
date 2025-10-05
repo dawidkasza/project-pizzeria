@@ -58,6 +58,7 @@ const select = {
       thisProduct.id = id;
       thisProduct.data = data;
       thisProduct.renderInMenu();
+      thisProduct.initAccordion();
       console.log('new Prodact:', thisProduct);
     }
     renderInMenu(){
@@ -70,7 +71,22 @@ const select = {
       const menuContainer = document.querySelector(select.containerOf.menu);
       /* add element to menu */
       menuContainer.appendChild(thisProduct.element);
-    } 
+    }
+    initAccordion(){
+      const thisProduct = this;
+      console.log(thisProduct);
+      const clickableTrigger = thisProduct.element.querySelector(select.menuProduct.clickable);
+      clickableTrigger.addEventListener('click', function(event){
+        event.preventDefault();
+        const activeProdact=document.querySelector(select.all.menuProductsActive);
+        if (activeProdact){
+          if (activeProdact !== thisProduct.element) {
+            activeProdact.classList.remove(classNames.menuProduct.wrapperActive);
+          }
+        }
+        thisProduct.element.classList.toggle(classNames.menuProduct.wrapperActive);
+      });
+    }
   }
 
   const app = {
