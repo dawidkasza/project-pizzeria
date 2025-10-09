@@ -331,9 +331,9 @@ const templates = {
     add(menuProduct){
       const thisCart = this;
       const generatedHTML = templates.cartProduct(menuProduct);
-      thisCart.element = utils.createDOMFromHTML(generatedHTML);
-      const cartContainer = document.querySelector(select.containerOf.cart);
-      cartContainer.appendChild(thisCart.element);
+      const generatedDOM= utils.createDOMFromHTML(generatedHTML);
+      //const cartContainer = document.querySelector(select.containerOf.cart);
+      thisCart.dom.productList.appendChild(generatedDOM);
 
       console.log('adding product', menuProduct);
     }
