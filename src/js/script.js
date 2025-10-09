@@ -148,6 +148,7 @@ const templates = {
       thisProduct.dom.cartButton.addEventListener('click', function(event){
         event.preventDefault();
         thisProduct.processOrder();
+        thisProduct.addToCart();
       });
     }
 
@@ -155,7 +156,7 @@ const templates = {
       const thisProduct = this;
 
       // covert form to object structure e.g. { sauce: ['tomato'], toppings: ['olives', 'redPeppers']}
-      const formData = utils.serializeFormToObject(thisProduct.form);
+      const formData = utils.serializeFormToObject(thisProduct.dom.form);
       //console.log('formData', formData);
 
       // set price to default price
@@ -192,6 +193,7 @@ const templates = {
       }
 
       // update calculated price in the HTML
+      thisProduct.priceSingle = price;
       price *=thisProduct.amountWidget.value;
       thisProduct.dom.priceElem.innerHTML = price;
     }
@@ -202,6 +204,47 @@ const templates = {
       thisProduct.dom.amountWidgetElem.addEventListener('updated', function(){
         thisProduct.processOrder();
       })
+    }
+
+    addToCart(){
+      const thisProduct = this;
+      app.cart.add(thisProduct.prepareCartProduct());
+      //app.cart.add(thisProduct);
+    }
+
+    prepareCartProduct(){
+      const thisProduct = this;
+
+      const productSummary={
+        id: thisProduct.id,
+        name:thisProduct.data.name,
+        amount:thisProduct.amountWidget.value,
+        priceSingle: thisProduct.priceSingle,
+        price: thisProduct.amountWidget.value*thisProduct.priceSingle,
+        params: thisProduct.prepareCartProductPrams()
+      };
+      return productSummary;
+    }
+
+    prepareCartProductPrams(){
+      const thisProduct = this;
+      const formData = utils.serializeFormToObject(thisProduct.dom.form);
+      const params ={};
+      for(let paramId in thisProduct.data.params) {
+        const param = thisProduct.data.params[paramId];
+        params[paramId] = {
+          label: param.label,
+          options: {}
+        }
+        for(let optionId in param.options) {
+          const option = param.options[optionId];
+          const optionSelected = formData[paramId] && formData[paramId].includes(optionId);
+          if(optionSelected) {
+            params[paramId].options[optionId]= option.label;
+          }
+        }
+      }
+      return params;
     }
   }
 
@@ -238,7 +281,7 @@ const templates = {
       }
       thisWidget.input.value = thisWidget.value;
 
-      console.log(newValue);
+      //console.log(newValue);
     }
     initAction(){
       const thisWidget = this;
@@ -275,13 +318,24 @@ const templates = {
       thisCart.dom = {};
       thisCart.dom.wrapper = element;
       thisCart.dom.toggleTrigger = thisCart.dom.wrapper.querySelector(select.cart.toggleTrigger);
+      thisCart.dom.productList = thisCart.dom.wrapper.querySelector(select.cart.productList);
     }
 
     initAction(){
       const thisCart = this;
-      thisCart.dom.toggleTrigger.addEventListener('click', function(event){
+      thisCart.dom.toggleTrigger.addEventListener('click', function(){
         thisCart.dom.wrapper.classList.toggle(classNames.cart.wrapperActive);
       })
+    }
+
+    add(menuProduct){
+      const thisCart = this;
+      const generatedHTML = templates.cartProduct(menuProduct);
+      thisCart.element = utils.createDOMFromHTML(generatedHTML);
+      const cartContainer = document.querySelector(select.containerOf.cart);
+      cartContainer.appendChild(thisCart.element);
+
+      console.log('adding product', menuProduct);
     }
   }
 
