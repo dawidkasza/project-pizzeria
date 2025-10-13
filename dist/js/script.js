@@ -90,7 +90,6 @@ const templates = {
       thisProduct.initOrderForm();
       thisProduct.initAmountWidhet();
       thisProduct.processOrder();
-     //console.log('new Prodact:', thisProduct);
     }
 
     renderInMenu(){
@@ -133,7 +132,6 @@ const templates = {
 
     initOrderForm(){
       const thisProduct = this;
-      //console.log('initOrderForm');
       thisProduct.dom.form.addEventListener('submit', function(event){
         event.preventDefault();
         thisProduct.processOrder();
@@ -157,7 +155,6 @@ const templates = {
 
       // covert form to object structure e.g. { sauce: ['tomato'], toppings: ['olives', 'redPeppers']}
       const formData = utils.serializeFormToObject(thisProduct.dom.form);
-      //console.log('formData', formData);
 
       // set price to default price
       let price = thisProduct.data.price;
@@ -166,13 +163,11 @@ const templates = {
       for(let paramId in thisProduct.data.params) {
         // determine param value, e.g. paramId = 'toppings', param = { label: 'Toppings', type: 'checkboxes'... }
         const param = thisProduct.data.params[paramId];
-        //console.log(paramId, param);
 
         // for every option in this category
         for(let optionId in param.options) {
           // determine option value, e.g. optionId = 'olives', option = { label: 'Olives', price: 2, default: true }
           const option = param.options[optionId];
-          //console.log(optionId, option);
           const optionImage = thisProduct.dom.imageWrapper.querySelector('.'+paramId+'-'+optionId);
           if (formData[paramId] && formData[paramId].includes(optionId)){
             if (optionImage){
@@ -209,7 +204,6 @@ const templates = {
     addToCart(){
       const thisProduct = this;
       app.cart.add(thisProduct.prepareCartProduct());
-      //app.cart.add(thisProduct);
     }
 
     prepareCartProduct(){
@@ -260,8 +254,6 @@ const templates = {
       }
       
       thisWidget.initAction();
-      console.log('AmountWidget:', thisWidget);
-      console.log('constructor arguments:', element);
     }
     getElements(element){
       const thisWidget = this;
@@ -280,8 +272,6 @@ const templates = {
         thisWidget.announce();
       }
       thisWidget.input.value = thisWidget.value;
-
-      //console.log(newValue);
     }
     initAction(){
       const thisWidget = this;
@@ -299,7 +289,10 @@ const templates = {
     }
     announce(){
       const thisWidget = this;
-      const event = new Event('updated');
+      //const event = new Event('updated');
+      const event = new CustomEvent('updated',{
+       bubbles: true 
+      });
       thisWidget.element.dispatchEvent(event);
     }
   }
@@ -310,7 +303,6 @@ const templates = {
       thisCart.products = [];
       thisCart.getElements(element);
       thisCart.initAction();
-      console.log('new Cart', thisCart);
     }
 
     getElements(element){
@@ -319,6 +311,10 @@ const templates = {
       thisCart.dom.wrapper = element;
       thisCart.dom.toggleTrigger = thisCart.dom.wrapper.querySelector(select.cart.toggleTrigger);
       thisCart.dom.productList = thisCart.dom.wrapper.querySelector(select.cart.productList);
+      thisCart.dom.deliveryFee = thisCart.dom.wrapper.querySelector(select.cart.deliveryFee);
+      thisCart.dom.subtotalPrice = thisCart.dom.wrapper.querySelector(select.cart.subtotalPrice);
+      thisCart.dom.totalPrice = thisCart.dom.wrapper.querySelectorAll(select.cart.totalPrice);
+      thisCart.dom.totalNumber = thisCart.dom.wrapper.querySelector(select.cart.totalNumber);
     }
 
     initAction(){
@@ -326,18 +322,44 @@ const templates = {
       thisCart.dom.toggleTrigger.addEventListener('click', function(){
         thisCart.dom.wrapper.classList.toggle(classNames.cart.wrapperActive);
       })
+      thisCart.dom.productList.addEventListener('updated', function(){
+        thisCart.update();
+      })
     }
 
     add(menuProduct){
       const thisCart = this;
       const generatedHTML = templates.cartProduct(menuProduct);
       const generatedDOM= utils.createDOMFromHTML(generatedHTML);
-      //const cartContainer = document.querySelector(select.containerOf.cart);
       thisCart.dom.productList.appendChild(generatedDOM);
-
-      //console.log('adding product', menuProduct);
       thisCart.products.push(new CartProduct(menuProduct, generatedDOM));
-      //console.log('thisCart.prodacts: ',thisCart.products)
+      thisCart.update();
+
+    }
+
+    update(){
+      const thisCart = this;
+      const deliveryFee = settings.cart.defaultDeliveryFee;
+      let totalNumber = 0;
+      let subtotalPrice = 0;
+      for (let product of thisCart.products){
+        totalNumber=totalNumber+product.amount;
+        subtotalPrice=subtotalPrice+product.price;
+      }
+      if (totalNumber != 0) {
+        thisCart.totalPrice = subtotalPrice + deliveryFee;
+        thisCart.dom.deliveryFee.innerHTML = deliveryFee;
+      } else {
+        thisCart.totalPrice = 0;
+      }
+      thisCart.dom.subtotalPrice.innerHTML = subtotalPrice;
+      thisCart.dom.totalNumber.innerHTML = totalNumber;
+      for (let priceElem of thisCart.dom.totalPrice){
+        priceElem.innerHTML = thisCart.totalPrice;
+      }
+      console.log(thisCart.totalPrice);
+      //console.log(totalNumber);
+      //console.log(subtotalPrice);
     }
   }
 
@@ -352,7 +374,6 @@ const templates = {
       thisCartProduct.params = menuProduct.params;
       thisCartProduct.getElements(element);
       thisCartProduct.initAmountWidget();
-      console.log(thisCartProduct);
     }
 
     getElements(element){
@@ -372,6 +393,7 @@ const templates = {
         let price = thisCartProduct.priceSingle;
         price *=thisCartProduct.amountWidget.value;
       thisCartProduct.dom.price.innerHTML = price;
+      thisCartProduct.price = price;
       })  
     }
   }
@@ -379,8 +401,6 @@ const templates = {
   const app = {
     initMenu: function(){
       const thisApp = this;
-      //console.log('thisApp.data:', thisApp.data);
-      
       for (let productData in thisApp.data.products){
         new Product(productData, thisApp.data.products[productData]);
       }
@@ -399,11 +419,11 @@ const templates = {
 
     init: function(){
       const thisApp = this;
-      //console.log('*** App starting ***');
-      //console.log('thisApp:', thisApp);
-      //console.log('classNames:', classNames);
-      //console.log('settings:', settings);
-      //console.log('templates:', templates);
+      console.log('*** App starting ***');
+      console.log('thisApp:', thisApp);
+      console.log('classNames:', classNames);
+      console.log('settings:', settings);
+      console.log('templates:', templates);
       thisApp.initData();
       thisApp.initMenu();
       thisApp.initCart();
