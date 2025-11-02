@@ -22,7 +22,7 @@ import BaseWidget from "./BaseWidget.js";
         && value<=settings.amountWidget.defaultMax;
     }
 
-    rednerValue(){
+    renderValue(){
       const thisWidget = this;
       thisWidget.dom.input.value = thisWidget.value;
     }

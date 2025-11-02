@@ -2,11 +2,13 @@ import {settings, select, classNames} from './setting.js';
 import Product from './components/Product.js';
 import Cart from './components/Cart.js';
 import Booking from './components/Bokking.js';
+import Home from './components/Home.js';
 
 const app = {
   initPages(){
     const thisApp = this;
     thisApp.pages = document.querySelector(select.containerOf.pages).children;
+    console.log(thisApp.pages);
     thisApp.navLinks = document.querySelectorAll(select.nav.links);
     const idFromHash = window.location.hash.replace('#/', '');
     let pageMatchingHash = thisApp.pages[0].id;
@@ -86,17 +88,19 @@ const app = {
     thisApp.booking = new Booking(bookingElem);
   },
 
+  initHome: function(){
+    const thisApp = this;
+    const homeElem = document.querySelector(select.containerOf.home);
+    thisApp.home = new Home(homeElem);
+  },
+
   init: function(){
     const thisApp = this;
-    //console.log('*** App starting ***');
-    //console.log('thisApp:', thisApp);
-    //console.log('classNames:', classNames);
-    //console.log('settings:', settings);
-    //console.log('templates:', templates);
     thisApp.initPages();
     thisApp.initData();
     thisApp.initCart();
     thisApp.initBooking();
+    thisApp.initHome();
   },
 };
 

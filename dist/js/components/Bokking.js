@@ -7,6 +7,7 @@ import utils from "../utils.js";
    constructor(element){
       const thisBooking = this;
       thisBooking.render(element);
+      thisBooking.selectedTable = null;
       thisBooking.initWidgets();
       thisBooking.getData();
    }
@@ -116,6 +117,10 @@ import utils from "../utils.js";
    updateDom(){
       const thisBooking = this;
 
+      thisBooking.selectedTable = null;
+      for (let table of thisBooking.dom.tables) {
+         table.classList.remove('selected');
+      }
       thisBooking.date = thisBooking.datePicker.value;
       thisBooking.hour = utils.hourToNumber(thisBooking.hourPicker.value);
 
@@ -134,7 +139,8 @@ import utils from "../utils.js";
             tableId = parseInt(tableId);
          }
 
-         if (!allAvailable && thisBooking.booked[thisBooking.date][thisBooking.hour].includes(tableId)> -1){
+         if (!allAvailable && thisBooking.booked[thisBooking.date][thisBooking.hour].includes(tableId)) 
+         {
             table.classList.add(classNames.booking.tableBooked);
          } else {
             table.classList.remove(classNames.booking.tableBooked);
@@ -153,6 +159,10 @@ import utils from "../utils.js";
       thisBooking.dom.datePicker = thisBooking.dom.wrapper.querySelector(select.widgets.datePicker.wrapper);
       thisBooking.dom.hourPicker = thisBooking.dom.wrapper.querySelector(select.widgets.hourPicker.wrapper);
       thisBooking.dom.tables = thisBooking.dom.wrapper.querySelectorAll(select.booking.tables);
+      thisBooking.dom.tablewrapper = thisBooking.dom.wrapper.querySelector(select.booking.tablewrapper);
+      thisBooking.dom.form = thisBooking.dom.wrapper.querySelector(select.booking.form);
+      thisBooking.dom.phone = thisBooking.dom.form.querySelector(select.booking.phone);
+      thisBooking.dom.address = thisBooking.dom.form.querySelector(select.booking.address);
    }
 
    initWidgets(){
@@ -164,7 +174,77 @@ import utils from "../utils.js";
       thisBooking.dom.wrapper.addEventListener('updated', function(){
          thisBooking.updateDom();
       })
+      thisBooking.initTables();
+      thisBooking.dom.form.addEventListener('submit', function(event) {
+         event.preventDefault();
+         thisBooking.sendBooking();
+      });
    }
+
+   initTables(){
+      const thisBooking = this;
+      thisBooking.dom.tablewrapper.addEventListener('click', function(event) {
+         const clickedElement = event.target.closest(select.booking.tables);
+         if (!clickedElement) return;
+         if (clickedElement.classList.contains(classNames.booking.tableBooked)) {
+            alert('Ten stolik jest już zajęty!');
+            return;
+         }
+         let tableId = clickedElement.getAttribute(settings.booking.tableIdAttribute);
+         if (!isNaN(tableId)) {
+            tableId = parseInt(tableId);
+         }
+         if (thisBooking.selectedTable === tableId) {
+            clickedElement.classList.remove('selected');
+            thisBooking.selectedTable = null;
+            return;
+         }
+         for (let table of thisBooking.dom.tables) {
+            table.classList.remove('selected');
+         }
+         clickedElement.classList.add('selected');
+         thisBooking.selectedTable = tableId;
+   });
+      
+   }
+
+   sendBooking(){
+      const thisBooking = this;
+      const url = settings.db.url + '/' + settings.db.bookings;
+      const payload = {
+        date: thisBooking.datePicker.value,
+        hour: thisBooking.hourPicker.value,
+        table: thisBooking.selectedTable,
+        duration: thisBooking.dom.hoursAmount.value,
+        ppl: thisBooking.dom.hoursAmount.value,
+        starters: [],
+        phone: null,
+        address: null
+      };
+
+      const starters = thisBooking.dom.wrapper.querySelectorAll(select.booking.starters);
+      for (let starter of starters) {
+         payload.starters.push(starter.value);
+      }
+
+      //console.log(payload);
+      const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+        body: JSON.stringify(payload),
+      };
+
+      fetch(url, options)
+        .then(function(response){
+            return response.json();
+        }).then(function(parsedResponse){
+         console.log('parsedResponse', parsedResponse);
+         thisBooking.makeBooked(payload.date, payload.hour, payload.duration, payload.table);
+         thisBooking.updateDom();
+        })
+    }
  }
 
  export default Booking;

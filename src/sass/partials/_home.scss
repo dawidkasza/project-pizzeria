@@ -1,0 +1,40 @@
+.home__btn {
+   max-width: 250px;
+   height: 100%;
+   z-index: 2;
+      img{
+         object-fit: cover;
+         width: 100%;
+         height: 100%;           
+      }
+
+   span{
+      display: block;
+      position: absolute;
+      bottom: 10%;
+      left: 50%;
+      transform: translateX(-50%) translateY(0);
+      color: $color-light;
+      font-weight: bold;
+      transition: transform 0.3s ease;
+
+   }
+}
+
+.home__btn:hover span {
+  transform: translateX(-50%) translateY(-10px);
+}
+
+.home__actions-buttons {
+   display: flex;
+   &__image {
+    display: inline-block;
+    margin: 10px 30px;
+    position: relative;
+    transition: .2s;  
+   }
+}
+
+.home__opening-hours{
+   background-color: $color-main;
+}

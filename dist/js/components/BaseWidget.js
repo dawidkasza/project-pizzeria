@@ -21,7 +21,7 @@ class BaseWidget{
          thisWidget.correctValue = newValue;
          thisWidget.announce();
       }
-      thisWidget.rednerValue();
+      thisWidget.renderValue();
    }
 
    setValue(value){
@@ -37,7 +37,7 @@ class BaseWidget{
       return !isNaN(value);
    }
 
-   rednerValue(){
+   renderValue(){
       const thisWidget = this;
       thisWidget.dom.wrapper.innerHTML = thisWidget.value;
    }
