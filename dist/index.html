@@ -248,68 +248,114 @@
 
   <script id="template-home-page" type="text/x-handlebars-template">
     <section class="home">
-      <div class="home__actions container">
-        <div class="home__actions-buttons">
-          <div>
-          <a href="#order" class="home__btn home__btn--order">
-            <img src="images/assets/pizza-1.jpg" alt="Order pizza">
-            <span>ORDER ONLINE</span>
-          </a>
+        <div class="home__actions container">
+          <div class="home__actions-buttons">
+            <a href="#order" class="home__btn home__btn--order">
+              <img src="images/assets/pizza-1.jpg" alt="Order pizza">
+              <span>ORDER ONLINE</span>
+            </a>
+            <a href="#booking" class="home__btn home__btn--booking">
+              <img src="images/assets/pizza-2.jpg" alt="Book a table">
+              <span>BOOK A TABLE</span>
+            </a>
           </div>
-          <a href="#booking" class="home__btn home__btn--booking">
-            <img src="images/assets/pizza-2.jpg" alt="Book a table">
-            <span>BOOK A TABLE</span>
-          </a>
+          <div class="home__opening-hours">
+            <h3>OPENING HOURS:</h3>
+            <p>TUE–SUN, 12PM – 12AM</p>
           </div>
         </div>
+        <div class="home__reviews container">
+          <div class="carousel" data-flickity='{ "autoPlay": 3000, "wrapAround": true, "pauseAutoPlayOnHover": false, "prevNextButtons": false, "pageDots": true }'>
+            <div class="carousel-cell">
+              <div class="home__review">
+                <div class="home__review-image">
+                  <img src="images/assets/pizza-3.jpg" alt="Customer 1">
+                </div>
+                <div class="home__review-text">
+                  <h4>AMAZING SERVICE!</h4>
+                  <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam egestas viverra tortor."</p>
+                  <p><em>– Margaret Osborne</em></p>
+                </div>
+              </div>
+            </div>
 
-        <div class="home__opening-hours">
-          <h3>OPENING HOURS:</h3>
-          <p>TUE–SUN, 12PM – 12AM</p>
+            <div class="carousel-cell">
+              <div class="home__review">
+                <div class="home__review-image">
+                  <img src="images/assets/pizza-3.jpg" alt="Customer 2">
+                </div>
+                <div class="home__review-text">
+                  <h4>BEST PIZZA IN TOWN!</h4>
+                  <p>"Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae."</p>
+                  <p><em>– Thomas Rivera</em></p>
+                </div>
+              </div>
+            </div>
+            <div class="carousel-cell">
+              <div class="home__review">
+                <div class="home__review-image">
+                  <img src="images/assets/pizza-3.jpg" alt="Customer 3">
+                </div>
+                <div class="home__review-text">
+                  <h4>WONDERFUL ATMOSPHERE!</h4>
+                  <p>"Curabitur sed leo ac justo sodales efficitur. Nulla facilisi. Donec vel lacus eget erat varius."</p>
+                  <p><em>– Natalie Brown</em></p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+        <div class="home__gallery container">
+          <div class="home__gallery-grid">
+            <div class="home__gallery-item">
+              <img src="images/assets/pizza-4.jpg" alt="Dish 1">
+              <div class="overlay">
+                <i class="fas fa-search"></i>
+                <i class="fas fa-heart"></i>
+              </div>
+            </div>
+            <div class="home__gallery-item">
+              <img src="images/assets/pizza-5.jpg" alt="Dish 2">
+              <div class="overlay">
+                <i class="fas fa-search"></i>
+                <i class="fas fa-heart"></i>
+              </div>
+            </div>
+            <div class="home__gallery-item">
+              <img src="images/assets/pizza-6.jpg" alt="Dish 3">
+              <div class="overlay">
+                <i class="fas fa-search"></i>
+                <i class="fas fa-heart"></i>
+              </div>
+            </div>
+            <div class="home__gallery-item">
+              <img src="images/assets/pizza-7.jpg" alt="Dish 4">
+              <div class="overlay">
+                <i class="fas fa-search"></i>
+                <i class="fas fa-heart"></i>
+              </div>
+            </div>
+            <div class="home__gallery-item">
+              <img src="images/assets/pizza-8.jpg" alt="Dish 5">
+              <div class="overlay">
+                <i class="fas fa-search"></i>
+                <i class="fas fa-heart"></i>
+              </div>
+            </div>
+            <div class="home__gallery-item">
+              <img src="images/assets/pizza-9.jpg" alt="Dish 6">
+              <div class="overlay">
+                <i class="fas fa-search"></i>
+                <i class="fas fa-heart"></i>
+              </div>
+            </div>
+          </div>
 
-      <div class="home__review container">
-        <div class="home__review-carousel">
-          <div class="carousel-cell">
-            <div>
-              <img src="images/assets/pizza-3.jpg">
-            </div>
-            <div>
-              <h4>AMAZING SERVICE!</h4>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-              <p><em>– Margaret Osborne</em></p>
-            </div>
-          </div>
-          <div class="carousel-cell">
-            <div>
-              <img src="images/assets/pizza-3.jpg">
-            </div>
-            <h4>DELICIOUS FOOD!</h4>
-            <p>Best pizza in town. Friendly staff, great atmosphere!</p>
-            <p><em>– Anthony R.</em></p>
-          </div>
-          <div class="carousel-cell">
-            <div>
-              <img src="images/assets/pizza-3.jpg">
-            </div>
-            <h4>LOVELY PLACE!</h4>
-            <p>Perfect for family dinners or romantic evenings.</p>
-            <p><em>– Julia M.</em></p>
+          <!-- Sekcja 4: Link do Instagrama -->
+          <div class="home__gallery-footer">
+            <a href="https://instagram.com" target="_blank">View more on Instagram</a>
           </div>
         </div>
-      </div>
-      <div class="home__gallery container">
-        <a href="#" class="book__image" data-id="{{ id }}">
-        <figure>
-          <img src="{{ image }}" alt="{{ name }}">
-        </figure>
-      </a>
-        <div class="home__gallery-footer">
-          <a href="https://instagram.com" target="_blank">View more on Instagram</a>
-        </div>
-      </div>
-    </div>
     </section>
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.0/handlebars.min.js"></script>

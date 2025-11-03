@@ -1,40 +1,218 @@
-.home__btn {
-   max-width: 250px;
-   height: 100%;
-   z-index: 2;
-      img{
-         object-fit: cover;
+.home {
+   background-color: $color-light;
+   max-width: 900px;
+   margin: $base-size * 4 auto;
+   padding: $base-size * 4;
+   border-radius: $radius;
+   box-shadow: 0 ($base-size / 2) ($base-size * 2) rgba(0, 0, 0, 0.06);
+   color: $color-dark;
+   font-family: $font-text;
+
+   &__actions {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: $base-size * 0.5;
+      margin-bottom: $base-size * 2;
+
+      &-buttons {
+         display: flex;
+         gap: $base-size * 0.5;
          width: 100%;
-         height: 100%;           
+         justify-content: space-between;
+         align-items: stretch;
       }
 
-   span{
-      display: block;
-      position: absolute;
-      bottom: 10%;
-      left: 50%;
-      transform: translateX(-50%) translateY(0);
-      color: $color-light;
-      font-weight: bold;
-      transition: transform 0.3s ease;
+      .home__btn {
+         position: relative;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         width: $base-size * 25;
+         height: $base-size * 10;
+         border-radius: $radius;
+         overflow: hidden;
+         cursor: pointer;
+         text-decoration: none;
+         color: $color-light;
+         font-family: $font-header;
+         font-weight: $font-bold;
+         text-transform: uppercase;
+         letter-spacing: 0.6px;
+         transition: $transition;
+         background-color: $color-main;
 
+         img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform $transition, filter $transition;
+            filter: brightness(0.55);
+            z-index: 1;
+         }
+
+         span {
+            position: relative;
+            z-index: 2;
+            font-size: $base-size * 1.4;
+            padding: $base-size * 0.8 $base-size * 1.2;
+            border-radius: $radius / 2;
+            transition: $transition;
+         }
+
+         &:hover {
+            img {
+               transform: scale(1.05);
+               filter: brightness(0.8);
+            }
+
+            span {
+               letter-spacing: 1px;
+               transform: scale(1.03);
+            }
+         }
+      }
+      .home__opening-hours {
+         width: 100%;
+         background-color: $color-main;
+         color: $color-light;
+         padding: $base-size * 1.6;
+         border-radius: $radius;
+         text-align: center;
+         font-family: $font-header;
+
+         h3 {
+            margin: 0;
+            font-size: $base-size * 1.6;
+            font-weight: $font-bold;
+            text-transform: uppercase;
+         }
+
+         p {
+            margin: $base-size * 0.6 0 0;
+            font-size: $base-size * 1.0;
+            font-weight: $font-normal;
+         }
+      }
    }
-}
 
-.home__btn:hover span {
-  transform: translateX(-50%) translateY(-10px);
-}
+   .home__reviews {
+      border-radius: $radius;
+      margin: $base-size * 4 0;
+      width: 100% !important;
+      height: 100% !important;
+      margin-left: auto;
+      margin-right: auto;
 
-.home__actions-buttons {
-   display: flex;
-   &__image {
-    display: inline-block;
-    margin: 10px 30px;
-    position: relative;
-    transition: .2s;  
+      .carousel-cell {
+         width: 100%;
+         height: $base-size * 18;
+         .home__review{
+            display: flex;
+            padding: $base-size;
+         }
+         .home__review-image{
+            margin: auto;
+         }
+         img {
+            width: 180px;
+            height: 180px;
+            object-fit: cover;
+            display: block;
+         }
+
+         .home__review-text{
+            padding: $base-size $base-size*2;
+         }
+      }
    }
-}
 
-.home__opening-hours{
-   background-color: $color-main;
+   .flickity-page-dots {
+      bottom: -($base-size * 2);
+
+      .dot {
+         width: $base-size * 0.8;
+         height: $base-size * 0.8;
+         margin: 0 $base-size * 0.4;
+         background: lighten($color-dark, 20%);
+         opacity: 0.6;
+         border-radius: 50%;
+         &.is-selected {
+            background: $color-dark;
+            opacity: 1;
+         }
+      }
+   }
+
+   &__gallery {
+      margin-top: $base-size * 2;
+      &-grid {
+         display: grid;
+         grid-template-columns: repeat(3, 1fr);
+         gap: $base-size;
+         margin-bottom: $base-size * 1.5;
+      }
+
+      .home__gallery-item {
+         position: relative;
+         overflow: hidden;
+         border-radius: $radius;
+         background: #f6f6f6;
+         aspect-ratio: 1 / 1;
+
+         img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform $transition;
+         }
+
+         .overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.45);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: $base-size;
+            opacity: 0;
+            transition: opacity $transition;
+         }
+
+         .overlay i {
+            color: $color-light; // domyślnie białe
+            font-size: $base-size * 1.6;
+            transition: color $transition, transform $transition;
+
+            &:hover {
+               color: $color-main; // kolor przewodni po najechaniu
+               transform: scale(1.15);
+            }
+         }
+
+         &:hover {
+            img { transform: scale(1.04); }
+            .overlay { opacity: 1; }
+         }
+      }
+      &-footer {
+         margin-top: $base-size;
+         text-align: left;
+         a {
+            color: $color-main;
+            font-family: $font-text;
+            font-weight: $font-semibold;
+            text-decoration: none;
+            transition: $transition;
+            &:hover {
+               text-decoration: underline;
+               color: darken($color-main, 10%);
+            }
+         }
+      }
+   }
 }

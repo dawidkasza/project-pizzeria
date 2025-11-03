@@ -30,11 +30,10 @@ class Home {
       cellAlign: 'left',
       contain: true,
       wrapAround: true,
-      autoPlay: 3000, // co 3 sekundy
-      prevNextButtons: false,
+      autoPlay: 3000,
       pageDots: false,
       draggable: false,
-      pauseAutoPlayOnHover: false,
+      pauseAutoPlayOnHover: false
     });
   }
 
